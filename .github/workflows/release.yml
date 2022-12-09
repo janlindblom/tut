@@ -29,11 +29,9 @@ jobs:
         id: version
 
       - uses: actions/download-artifact@v3
-
-      - name: Package Windows binaries
-        run: |
-          zip -9 -y tut.windows-386.zip tut_386.exe
-          zip -9 -y tut.windows-amd64.zip tut_amd64.exe
+        with:
+          name: tut-windows
+          path: ./tut-windows
 
       - name: Create the release
         uses: actions/create-release@v1
@@ -52,7 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tut.windows-386.zip
+          asset_path: ./tut-windows/tut.windows-386.zip
           asset_name: tut.windows-386.zip
           asset_content_type: application/zip
 
@@ -62,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tut.windows-amd64.zip
+          asset_path: ./tut-windows/tut.windows-amd64.zip
           asset_name: tut.windows-amd64.zip
           asset_content_type: application/zip

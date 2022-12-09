@@ -27,9 +27,12 @@ jobs:
       env:
         GOOS: windows
         GOARCH: ${{ matrix.go-arch }}
-      run: go build -v -o tut_${{ matrix.go-arch }}.exe
+      run: |
+        go build -v -o tut_${{ matrix.go-arch }}.exe
+        zip -9 -y tut.windows-${{ matrix.go-arch }}.zip tut_${{ matrix.go-arch }}.exe
+
     - name: Upload build output
       uses: actions/upload-artifact@v3
       with:
-        name: tut_${{ matrix.go-arch }}
-        path: tut_${{ matrix.go-arch }}.exe
+        name: tut-windows
+        path: tut_${{ matrix.go-arch }}.zip
