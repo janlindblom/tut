@@ -7,15 +7,11 @@ on:
 
 jobs:
   build_release:
-    name: build_release
+    name: Build Release
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-arch: ["386", "amd64"]
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -32,14 +28,12 @@ jobs:
           echo "::set-output name=version::$(./bin/tut --version | head -1 )"
         id: version
 
-      - name: Build 32-bit Windows binaries
-        env:
-          GOOS: windows
-          GOARCH: ${{ matrix.go-arch }}
-        run: go build -v -o tut_${{ matrix.go-arch }}.exe
+      - uses: actions/download-artifact@v3
 
-      - name: Package Windows ${{ matrix.go-arch }} binaries
-        run: zip -9 -y tut.windows-${{ matrix.go-arch }}.zip tut_${{ matrix.go-arch }}.exe
+      - name: Package Windows binaries
+        run: |
+          zip -9 -y tut.windows-386.zip tut_386.exe
+          zip -9 -y tut.windows-amd64.zip tut_amd64.exe
 
       - name: Create the release
         uses: actions/create-release@v1
@@ -52,12 +46,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: upload ${{ matrix.go-arch }} Windows artifact
+      - name: upload 386 Windows artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tut.windows-${{ matrix.go-arch }}.zip
-          asset_name: tut.windows-${{ matrix.go-arch }}.zip
+          asset_path: ./tut.windows-386.zip
+          asset_name: tut.windows-386.zip
+          asset_content_type: application/zip
+
+      - name: upload amd64 Windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tut.windows-amd64.zip
+          asset_name: tut.windows-amd64.zip
           asset_content_type: application/zip
