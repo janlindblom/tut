@@ -35,4 +35,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: tut-windows
-        path: tut_${{ matrix.go-arch }}.zip
+        path: tut.windows-${{ matrix.go-arch }}.zip
