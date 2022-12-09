@@ -12,14 +12,13 @@ jobs:
     strategy:
       matrix:
         go-arch: ["386", "amd64"]
-        go-version: ["1.19"]
     steps:
     - uses: actions/checkout@v3
 
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: ${{ matrix.go-version }}
+        go-version: 1.19
         cache: true
     - name: Install Go dependencies
       run: go install
