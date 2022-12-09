@@ -19,24 +19,27 @@ You can find Linux binaries under [releases](https://github.com/RasmusLindroth/t
 
 
 ## Table of contents
-* [Currently supported commands](#currently-supported-commands)
-* [Configuration](#configuration)
-* [Install instructions](#install-instructions)
-  * [Binary releases](#binary-releases)
-  * [Arch and Manjaro](#arch-and-manjaro)
-  * [Alpine Linux](#alpine-linux)
-  * [Debian](#debian)
-  * [FreeBSD](#freebsd)
-  * [OpenBSD](#openbsd)
-  * [NetBSD](#netbsd-and-others) and others
-  * [Homebrew (macOS)](#homebrew-macos)
-  * [openSUSE](#opensuse)
-* [Build it yourself](#build-it-yourself)
-* [Flags and commands](#flags-and-commands)
-* [Templates](#templates)
-* [Mouse support](#mouse-support)
-* [Password manager for secrets](#password-manager-for-secrets)
-* [Thanks to](#thanks-to)
+- [Tut - a Mastodon TUI](#tut---a-mastodon-tui)
+  - [Table of contents](#table-of-contents)
+  - [Currently supported commands](#currently-supported-commands)
+  - [Configuration](#configuration)
+  - [Install instructions](#install-instructions)
+    - [Binary releases](#binary-releases)
+    - [Arch and Manjaro](#arch-and-manjaro)
+    - [Alpine Linux](#alpine-linux)
+    - [Debian](#debian)
+    - [FreeBSD](#freebsd)
+    - [OpenBSD](#openbsd)
+    - [NetBSD (and others)](#netbsd-and-others)
+    - [Homebrew (macOS)](#homebrew-macos)
+    - [openSUSE](#opensuse)
+    - [Windows](#windows)
+  - [Build it yourself](#build-it-yourself)
+  - [Flags and commands](#flags-and-commands)
+  - [Templates](#templates)
+  - [Mouse support](#mouse-support)
+  - [Password manager for secrets](#password-manager-for-secrets)
+  - [Thanks to](#thanks-to)
 
 ## Currently supported commands
 * `:q` `:quit` exit
@@ -93,7 +96,7 @@ Tut is configurable, so you can change things like the colors, the default timel
 what image viewer to use and some more. Check out the configuration file to see 
 all the options.
 
-You find it in `XDG_CONFIG_HOME/tut/config.ini` which usually equals to `~/.config/tut/config.ini`.
+You find it in `XDG_CONFIG_HOME/tut/config.ini` on Linux and BSD systems which usually equals to `~/.config/tut/config.ini` or in `%AppData%\tut\config.ini` on Windows.
 
 You can find an updated configuration file in this repo named `config.example.ini`.
 If there are any new configurations options you can copy them frome that file.
@@ -156,7 +159,7 @@ pkgin install tut
 Available as a Homebrew Formulae over [here](https://formulae.brew.sh/formula/tut).
 Install it like this:
 
-```
+```bash
 brew update
 brew install tut
 ```
@@ -168,6 +171,16 @@ brew install tut
 `sudo zypper in tut`
 
 [suntorytimed](https://build.opensuse.org/users/suntorytimed) is the maintainer of the package.
+
+### Windows
+
+Available as a Scoop manifest in the [Scoop extras bucket](https://github.com/ScoopInstaller/Extras).
+Install it like this:
+
+```powershell
+scoop bucket add extras
+scoop install tut
+```
 
 ## Build it yourself
 If you don't use the binary that you find under releases

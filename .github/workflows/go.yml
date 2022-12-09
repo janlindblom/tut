@@ -1,0 +1,40 @@
+name: Go
+
+on:
+  push:
+    branches: [ "master", "feature/*" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-arch: ["386", "amd64"]
+        go-version: ["1.19"]
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: true
+    - name: Install Go dependencies
+      run: go install
+      with:
+        cache: true
+        go-version: ${{ matrix.go-version }}
+    - name: Build ${{ matrix.go-arch }} Windows executable
+      env: GOOS=windows GOARCH=${{ matrix.go-arch }}
+      run: go build -v -o bin/tut_${{ matrix.go-arch }}.exe
+      with:
+        go-version: ${{ matrix.go-version }}
+        go-arch: ${{ matrix.go-arch }}
+    - name: Upload build output
+      uses: actions/upload-artifact@v3
+      with:
+        name: tut_${{ matrix.go-arch }}
+        path: bin/tut_${{ matrix.go-arch }}.exe
+        go-arch: ${{ matrix.go-arch }}
