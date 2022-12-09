@@ -1,4 +1,4 @@
-name: Go
+name: Build Windows Binaries
 
 on:
   push:
@@ -26,9 +26,9 @@ jobs:
       env:
         GOOS: windows
         GOARCH: ${{ matrix.go-arch }}
-      run: go build -v -o bin/tut_${{ matrix.go-arch }}.exe
+      run: go build -v -o tut_${{ matrix.go-arch }}.exe
     - name: Upload build output
       uses: actions/upload-artifact@v3
       with:
         name: tut_${{ matrix.go-arch }}
-        path: bin/tut_${{ matrix.go-arch }}.exe
+        path: tut_${{ matrix.go-arch }}.exe

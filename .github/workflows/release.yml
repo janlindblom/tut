@@ -1,0 +1,63 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build_release:
+    name: build_release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-arch: ["386", "amd64"]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+          cache: true
+
+      - name: Install Go dependencies
+        run: go install
+
+      - name: Find current version
+        run: |
+          go build -v -o bin/tut
+          echo "::set-output name=version::$(./bin/tut --version | head -1 )"
+        id: version
+
+      - name: Build 32-bit Windows binaries
+        env:
+          GOOS: windows
+          GOARCH: ${{ matrix.go-arch }}
+        run: go build -v -o tut_${{ matrix.go-arch }}.exe
+
+      - name: Package Windows ${{ matrix.go-arch }} binaries
+        run: zip -9 -y tut.windows-${{ matrix.go-arch }}.zip tut_${{ matrix.go-arch }}.exe
+
+      - name: Create the release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: upload ${{ matrix.go-arch }} Windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tut.windows-${{ matrix.go-arch }}.zip
+          asset_name: tut.windows-${{ matrix.go-arch }}.zip
+          asset_content_type: application/zip
