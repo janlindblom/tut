@@ -24,7 +24,9 @@ jobs:
     - name: Install Go dependencies
       run: go install
     - name: Build ${{ matrix.go-arch }} Windows executable
-      env: GOOS=windows GOARCH=${{ matrix.go-arch }}
+      env:
+        GOOS: windows
+        GOARCH: ${{ matrix.go-arch }}
       run: go build -v -o bin/tut_${{ matrix.go-arch }}.exe
     - name: Upload build output
       uses: actions/upload-artifact@v3
