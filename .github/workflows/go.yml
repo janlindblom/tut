@@ -23,9 +23,6 @@ jobs:
         cache: true
     - name: Install Go dependencies
       run: go install
-      with:
-        cache: true
-        go-version: ${{ matrix.go-version }}
     - name: Build ${{ matrix.go-arch }} Windows executable
       env: GOOS=windows GOARCH=${{ matrix.go-arch }}
       run: go build -v -o bin/tut_${{ matrix.go-arch }}.exe
